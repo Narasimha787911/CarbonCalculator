@@ -29,60 +29,82 @@
             
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="car_miles" class="form-label">Car Miles</label>
+                    <label for="car_kilometers" class="form-label">Car Distance</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="car_miles" name="car_miles" value="0" min="0" step="0.1">
-                        <span class="input-group-text">miles/week</span>
+                        <input type="number" class="form-control" id="car_kilometers" name="car_kilometers" value="0" min="0" step="0.1">
+                        <span class="input-group-text">kilometers/week</span>
                     </div>
-                    <div class="form-text">Average miles driven per week</div>
+                    <div class="form-text">Average kilometers driven per week</div>
                 </div>
                 
                 <div class="col-md-6">
                     <label for="car_efficiency" class="form-label">Car Fuel Efficiency</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="car_efficiency" name="car_efficiency" value="25" min="1" step="0.1">
-                        <span class="input-group-text">mpg</span>
+                        <input type="number" class="form-control" id="car_efficiency" name="car_efficiency" value="15" min="1" step="0.1">
+                        <span class="input-group-text">km/liter</span>
                     </div>
-                    <div class="form-text">Miles per gallon your vehicle achieves</div>
+                    <div class="form-text">Kilometers per liter your vehicle achieves</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="two_wheeler_kilometers" class="form-label">Two-Wheeler Distance</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="two_wheeler_kilometers" name="two_wheeler_kilometers" value="0" min="0" step="0.1">
+                        <span class="input-group-text">kilometers/week</span>
+                    </div>
+                    <div class="form-text">Average kilometers on motorcycle/scooter per week</div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="two_wheeler_efficiency" class="form-label">Two-Wheeler Efficiency</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="two_wheeler_efficiency" name="two_wheeler_efficiency" value="50" min="1" step="0.1">
+                        <span class="input-group-text">km/liter</span>
+                    </div>
+                    <div class="form-text">Kilometers per liter your two-wheeler achieves</div>
                 </div>
             </div>
             
-            <div class="mb-3">
-                <label for="public_transit_miles" class="form-label">Public Transit</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="public_transit_miles" name="public_transit_miles" value="0" min="0" step="0.1">
-                    <span class="input-group-text">miles/week</span>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="auto_rickshaw_kilometers" class="form-label">Auto Rickshaw</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="auto_rickshaw_kilometers" name="auto_rickshaw_kilometers" value="0" min="0" step="0.1">
+                        <span class="input-group-text">kilometers/week</span>
+                    </div>
+                    <div class="form-text">Average kilometers by auto rickshaw per week</div>
                 </div>
-                <div class="form-text">Average miles traveled by bus, train, etc. per week</div>
+                
+                <div class="col-md-6">
+                    <label for="public_transit_kilometers" class="form-label">Public Transit</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="public_transit_kilometers" name="public_transit_kilometers" value="0" min="0" step="0.1">
+                        <span class="input-group-text">kilometers/week</span>
+                    </div>
+                    <div class="form-text">Average kilometers by bus, train, metro, etc. per week</div>
+                </div>
             </div>
             
             <h5 class="mt-4 mb-3">Air Travel (trips per year)</h5>
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="flights_short" class="form-label">Short Flights</label>
+                <div class="col-md-6 mb-3">
+                    <label for="flights_domestic" class="form-label">Domestic Flights</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="flights_short" name="flights_short" value="0" min="0">
+                        <input type="number" class="form-control" id="flights_domestic" name="flights_domestic" value="0" min="0">
                         <span class="input-group-text">trips/year</span>
                     </div>
-                    <div class="form-text">Under 1,000 miles one-way</div>
+                    <div class="form-text">Flights within India</div>
                 </div>
                 
-                <div class="col-md-4 mb-3">
-                    <label for="flights_medium" class="form-label">Medium Flights</label>
+                <div class="col-md-6 mb-3">
+                    <label for="flights_international" class="form-label">International Flights</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="flights_medium" name="flights_medium" value="0" min="0">
+                        <input type="number" class="form-control" id="flights_international" name="flights_international" value="0" min="0">
                         <span class="input-group-text">trips/year</span>
                     </div>
-                    <div class="form-text">1,000-3,000 miles one-way</div>
-                </div>
-                
-                <div class="col-md-4 mb-3">
-                    <label for="flights_long" class="form-label">Long Flights</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="flights_long" name="flights_long" value="0" min="0">
-                        <span class="input-group-text">trips/year</span>
-                    </div>
-                    <div class="form-text">Over 3,000 miles one-way</div>
+                    <div class="form-text">Flights from India to other countries</div>
                 </div>
             </div>
         </div>
@@ -96,31 +118,22 @@
             </h3>
             
             <div class="row">
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
                     <label for="electricity_kwh" class="form-label">Electricity</label>
                     <div class="input-group">
                         <input type="number" class="form-control" id="electricity_kwh" name="electricity_kwh" value="0" min="0" step="0.1">
                         <span class="input-group-text">kWh/month</span>
                     </div>
-                    <div class="form-text">From your utility bill</div>
+                    <div class="form-text">From your electricity bill (units consumed)</div>
                 </div>
                 
-                <div class="col-md-4 mb-3">
-                    <label for="natural_gas_therms" class="form-label">Natural Gas</label>
+                <div class="col-md-6 mb-3">
+                    <label for="lpg_cylinders" class="form-label">LPG Cylinders</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="natural_gas_therms" name="natural_gas_therms" value="0" min="0" step="0.1">
-                        <span class="input-group-text">therms/month</span>
+                        <input type="number" class="form-control" id="lpg_cylinders" name="lpg_cylinders" value="0" min="0" step="0.1">
+                        <span class="input-group-text">cylinders/month</span>
                     </div>
-                    <div class="form-text">From your utility bill</div>
-                </div>
-                
-                <div class="col-md-4 mb-3">
-                    <label for="heating_oil_gallons" class="form-label">Heating Oil</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="heating_oil_gallons" name="heating_oil_gallons" value="0" min="0" step="0.1">
-                        <span class="input-group-text">gallons/month</span>
-                    </div>
-                    <div class="form-text">If applicable</div>
+                    <div class="form-text">Number of 14.2kg LPG cylinders used per month</div>
                 </div>
             </div>
         </div>
@@ -136,11 +149,11 @@
             <div class="mb-3">
                 <label for="diet_type" class="form-label">Diet Type</label>
                 <select class="form-select" id="diet_type" name="diet_type">
-                    <option value="omnivore">Omnivore (Regular meat consumption)</option>
-                    <option value="flexitarian">Flexitarian (Occasional meat)</option>
-                    <option value="pescatarian">Pescatarian (Fish, no meat)</option>
-                    <option value="vegetarian">Vegetarian (No meat or fish)</option>
+                    <option value="vegetarian" selected>Vegetarian (No meat or fish)</option>
                     <option value="vegan">Vegan (No animal products)</option>
+                    <option value="eggetarian">Eggetarian (Vegetarian + eggs)</option>
+                    <option value="non-vegetarian">Non-Vegetarian (Occasional meat/fish)</option>
+                    <option value="high-non-vegetarian">High Non-Vegetarian (Frequent meat consumption)</option>
                 </select>
                 <div class="form-text">Select the option that best describes your typical diet</div>
             </div>

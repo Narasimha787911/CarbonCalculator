@@ -106,8 +106,8 @@
                         <ul class="list-unstyled">
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Use public transit more often</li>
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Consider carpooling to work</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Combine errands to reduce trips</li>
-                            {% if footprint.car_miles > 100 %}
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use two-wheelers for shorter trips</li>
+                            {% if footprint.car_kilometers > 150 %}
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Consider an electric vehicle</li>
                             {% endif %}
                         </ul>
@@ -121,9 +121,14 @@
                         <h5 class="card-title"><i class="fas fa-home me-2 text-info"></i>Home Energy</h5>
                         <ul class="list-unstyled">
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Switch to LED light bulbs</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Improve home insulation</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use a programmable thermostat</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider renewable energy options</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use natural lighting during daytime</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Turn off fans and lights when not in use</li>
+                            {% if footprint.electricity_kwh > 200 %}
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider rooftop solar panels</li>
+                            {% endif %}
+                            {% if footprint.lpg_cylinders > 1 %}
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider induction cooking</li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -134,10 +139,13 @@
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-utensils me-2 text-info"></i>Food & Consumption</h5>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Reduce meat consumption</li>
+                            {% if footprint.diet_type == 'non-vegetarian' or footprint.diet_type == 'high-non-vegetarian' %}
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider adopting vegetarian diet</li>
+                            {% endif %}
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Buy local and seasonal produce</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Shop at local farmer's markets</li>
                             <li><i class="fas fa-check-circle me-2 text-success"></i>Reduce food waste</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Compost organic waste</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Start kitchen garden for herbs and vegetables</li>
                         </ul>
                     </div>
                 </div>
