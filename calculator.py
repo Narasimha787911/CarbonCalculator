@@ -1,5 +1,5 @@
 def calculate_carbon_footprint(footprint):
-    """Calculate carbon footprint based on input data
+    """Calculate carbon footprint based on input data adapted for Indian context
     
     Args:
         footprint: CarbonFootprint model instance with input data
@@ -8,54 +8,55 @@ def calculate_carbon_footprint(footprint):
         Updated footprint object with calculated emissions
     """
     # Transportation calculations
-    # Car: EPA average is ~0.404 kg CO2e per mile (depends on fuel efficiency)
-    car_emissions = (footprint.car_miles / footprint.car_efficiency) * 8.887 if footprint.car_efficiency > 0 else 0
+    # Car: Indian emissions factor ~0.15 kg CO2e per km (depends on fuel efficiency)
+    # Average Indian car fuel efficiency ~15 km/L
+    car_emissions = (footprint.car_kilometers / (footprint.car_efficiency or 15)) * 2.31 if footprint.car_kilometers > 0 else 0
     
-    # Public transit: ~0.14 kg CO2e per passenger mile (bus)
-    public_transit_emissions = footprint.public_transit_miles * 0.14
+    # Two-wheeler emissions ~0.07 kg CO2e per km (depends on efficiency)
+    # Average Indian bike/scooter fuel efficiency ~50 km/L
+    two_wheeler_emissions = (footprint.two_wheeler_kilometers / (footprint.two_wheeler_efficiency or 50)) * 2.31 if footprint.two_wheeler_kilometers > 0 else 0
     
-    # Flights (kg CO2e per flight)
-    flight_short_emissions = footprint.flights_short * 500  # ~500kg per short flight
-    flight_medium_emissions = footprint.flights_medium * 1200  # ~1200kg per medium flight
-    flight_long_emissions = footprint.flights_long * 3000  # ~3000kg per long flight
+    # Auto rickshaw: ~0.08 kg CO2e per km
+    auto_rickshaw_emissions = footprint.auto_rickshaw_kilometers * 0.08
+    
+    # Public transit: ~0.04 kg CO2e per passenger km (bus/metro in India)
+    public_transit_emissions = footprint.public_transit_kilometers * 0.04
+    
+    # Flights (kg CO2e per flight) - adjusted for Indian routes
+    flight_domestic_emissions = footprint.flights_domestic * 300  # ~300kg per domestic flight
+    flight_international_emissions = footprint.flights_international * 2000  # ~2000kg per international flight
     
     # Sum transportation emissions
     transportation_footprint = (
         car_emissions + 
+        two_wheeler_emissions +
+        auto_rickshaw_emissions +
         public_transit_emissions + 
-        flight_short_emissions + 
-        flight_medium_emissions + 
-        flight_long_emissions
+        flight_domestic_emissions + 
+        flight_international_emissions
     )
     
     # Home energy calculations
-    # Electricity: ~0.45 kg CO2e per kWh (US average)
-    electricity_emissions = footprint.electricity_kwh * 0.45
+    # Electricity: ~0.82 kg CO2e per kWh (India average - coal heavy)
+    electricity_emissions = footprint.electricity_kwh * 0.82
     
-    # Natural gas: ~5.3 kg CO2e per therm
-    natural_gas_emissions = footprint.natural_gas_therms * 5.3
-    
-    # Heating oil: ~10.15 kg CO2e per gallon
-    heating_oil_emissions = footprint.heating_oil_gallons * 10.15
+    # LPG cylinders: ~42 kg CO2e per 14.2kg cylinder (standard in India)
+    lpg_emissions = footprint.lpg_cylinders * 42
     
     # Sum home energy emissions
-    home_energy_footprint = (
-        electricity_emissions + 
-        natural_gas_emissions + 
-        heating_oil_emissions
-    )
+    home_energy_footprint = electricity_emissions + lpg_emissions
     
-    # Food & consumption calculations (simplified based on diet type)
+    # Food & consumption calculations (simplified based on diet type for Indian context)
     diet_emissions = {
-        'vegan': 1500,  # Annual kg CO2e for vegan diet
-        'vegetarian': 2000,  # Annual kg CO2e for vegetarian diet
-        'pescatarian': 2500,  # Annual kg CO2e for pescatarian diet
-        'omnivore': 3000,  # Annual kg CO2e for average omnivore diet
-        'high_meat': 4000  # Annual kg CO2e for high meat diet
+        'vegan': 1200,  # Annual kg CO2e for vegan diet
+        'vegetarian': 1500,  # Annual kg CO2e for vegetarian diet (common in India)
+        'eggetarian': 1800,  # Annual kg CO2e for vegetarian+eggs diet (common in India)
+        'non-vegetarian': 2500,  # Annual kg CO2e for occasional non-veg diet (typical in India)
+        'high-non-vegetarian': 3500  # Annual kg CO2e for frequent non-veg diet
     }
     
-    # Get annual diet emissions and convert to daily (divide by 365)
-    food_footprint = diet_emissions.get(footprint.diet_type, 3000)
+    # Get annual diet emissions
+    food_footprint = diet_emissions.get(footprint.diet_type, 1500)  # Default to vegetarian for India
     
     # Calculate total footprint
     total_footprint = transportation_footprint + home_energy_footprint + food_footprint

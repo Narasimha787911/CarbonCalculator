@@ -10,12 +10,16 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(100))
-    location = db.Column(db.String(100))
+    state = db.Column(db.String(100))
+    city = db.Column(db.String(100))
+    pincode = db.Column(db.String(10))
+    mobile = db.Column(db.String(15))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
     activities = db.relationship('Activity', backref='user', lazy='dynamic')
     reports = db.relationship('Report', backref='user', lazy='dynamic')
+    footprints = db.relationship('CarbonFootprint', backref='user', lazy='dynamic')
     
     def set_password(self, password):
         """Set user password"""
@@ -95,29 +99,29 @@ class Report(db.Model):
         return f'<Report {self.id}: {self.total_emissions} kg CO2e>'
 
 
-# Legacy model - keeping for backward compatibility but will be phased out
 class CarbonFootprint(db.Model):
-    """Legacy model for storing carbon footprint calculation data"""
+    """Carbon footprint calculation model adapted for Indian users"""
     id = db.Column(db.Integer, primary_key=True)
     
     # User relationship
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
-    # Transportation
-    car_miles = db.Column(db.Float, default=0)
-    car_efficiency = db.Column(db.Float, default=0) 
-    public_transit_miles = db.Column(db.Float, default=0)
-    flights_short = db.Column(db.Integer, default=0)  # < 1000 miles
-    flights_medium = db.Column(db.Integer, default=0) # 1000-3000 miles
-    flights_long = db.Column(db.Integer, default=0)   # > 3000 miles
+    # Transportation (using kilometers for Indian context)
+    car_kilometers = db.Column(db.Float, default=0)
+    car_efficiency = db.Column(db.Float, default=0)  # km per liter
+    two_wheeler_kilometers = db.Column(db.Float, default=0)
+    two_wheeler_efficiency = db.Column(db.Float, default=0)  # km per liter
+    public_transit_kilometers = db.Column(db.Float, default=0)
+    auto_rickshaw_kilometers = db.Column(db.Float, default=0)
+    flights_domestic = db.Column(db.Integer, default=0)  # < 2000 km
+    flights_international = db.Column(db.Integer, default=0) # > 2000 km
     
-    # Home energy
+    # Home energy (adapted for Indian usage patterns)
     electricity_kwh = db.Column(db.Float, default=0)
-    natural_gas_therms = db.Column(db.Float, default=0)
-    heating_oil_gallons = db.Column(db.Float, default=0)
+    lpg_cylinders = db.Column(db.Float, default=0)  # Number of cylinders
     
-    # Food & consumption
-    diet_type = db.Column(db.String(50), default="omnivore")
+    # Food & consumption (with Indian diet types)
+    diet_type = db.Column(db.String(50), default="vegetarian")  # More common in India
     
     # Results
     transportation_footprint = db.Column(db.Float, default=0)

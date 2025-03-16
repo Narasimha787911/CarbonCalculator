@@ -28,6 +28,10 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         name = request.form.get('name', '')
+        state = request.form.get('state', '')
+        city = request.form.get('city', '')
+        pincode = request.form.get('pincode', '')
+        mobile = request.form.get('mobile', '')
         
         # Form validation
         if not username or not email or not password:
@@ -48,14 +52,24 @@ def register():
             return render_template('register.html')
         
         # Create new user
-        user = User(username=username, email=email, name=name)
+        user = User(
+            username=username, 
+            email=email, 
+            name=name,
+            state=state,
+            city=city,
+            pincode=pincode,
+            mobile=mobile
+        )
         user.set_password(password)
         
         try:
             db.session.add(user)
             db.session.commit()
-            flash('Your account has been created! You can now log in.', 'success')
-            return redirect(url_for('login'))
+            # Log the user in automatically after registration
+            login_user(user)
+            flash(f'Welcome, {user.name or user.username}! Your account has been created.', 'success')
+            return redirect(url_for('index'))
         except Exception as e:
             db.session.rollback()
             app.logger.error(f"Error registering user: {str(e)}")
@@ -67,7 +81,7 @@ def register():
 def login():
     """User login page"""
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('index'))
         
     if request.method == 'POST':
         username = request.form.get('username')
@@ -90,7 +104,7 @@ def login():
             next_page = request.args.get('next')
             if next_page:
                 return redirect(next_page)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('index'))
         else:
             flash('Invalid username or password', 'danger')
     
@@ -114,26 +128,27 @@ def dashboard():
 
 @app.route('/calculator', methods=['GET', 'POST'])
 def calculator():
-    """Carbon footprint calculator form and submission"""
+    """Carbon footprint calculator form submission (adapted for Indian users)"""
     if request.method == 'POST':
         try:
-            # Create a new carbon footprint record
+            # Create a new carbon footprint record with Indian metrics
             footprint = CarbonFootprint(
-                # Transportation
-                car_miles=float(request.form.get('car_miles', 0)),
-                car_efficiency=float(request.form.get('car_efficiency', 25)),
-                public_transit_miles=float(request.form.get('public_transit_miles', 0)),
-                flights_short=int(request.form.get('flights_short', 0)),
-                flights_medium=int(request.form.get('flights_medium', 0)),
-                flights_long=int(request.form.get('flights_long', 0)),
+                # Transportation (using kilometers for Indian context)
+                car_kilometers=float(request.form.get('car_kilometers', 0)),
+                car_efficiency=float(request.form.get('car_efficiency', 15)),  # km per liter (default for Indian car)
+                two_wheeler_kilometers=float(request.form.get('two_wheeler_kilometers', 0)),
+                two_wheeler_efficiency=float(request.form.get('two_wheeler_efficiency', 50)),  # km per liter
+                auto_rickshaw_kilometers=float(request.form.get('auto_rickshaw_kilometers', 0)),
+                public_transit_kilometers=float(request.form.get('public_transit_kilometers', 0)),
+                flights_domestic=int(request.form.get('flights_domestic', 0)),
+                flights_international=int(request.form.get('flights_international', 0)),
                 
-                # Home energy
+                # Home energy (adapted for Indian usage)
                 electricity_kwh=float(request.form.get('electricity_kwh', 0)),
-                natural_gas_therms=float(request.form.get('natural_gas_therms', 0)),
-                heating_oil_gallons=float(request.form.get('heating_oil_gallons', 0)),
+                lpg_cylinders=float(request.form.get('lpg_cylinders', 0)),
                 
-                # Food & consumption
-                diet_type=request.form.get('diet_type', 'omnivore'),
+                # Food & consumption (with Indian diet types)
+                diet_type=request.form.get('diet_type', 'vegetarian'),  # Default to vegetarian in India
                 
                 # Optional title
                 title=request.form.get('title', 'My Carbon Footprint')
