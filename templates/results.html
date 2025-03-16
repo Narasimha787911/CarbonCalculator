@@ -3,17 +3,17 @@
 {% block title %}Carbon Emission Calculator - Results{% endblock %}
 
 {% block content %}
-<div class="card bg-dark-subtle mb-4">
+<div class="card border-0 shadow mb-4">
     <div class="card-body">
         <h1 class="card-title">Your Carbon Footprint Results</h1>
         <p class="lead">Based on your input, we've calculated your carbon footprint.</p>
         
         <div class="row mt-4">
             <div class="col-md-4 mb-3">
-                <div class="card bg-info text-white h-100">
-                    <div class="card-body text-center">
-                        <h3 class="display-4">{{ "%.1f"|format(footprint.total_footprint) }}</h3>
-                        <p class="lead">kg CO₂e Total Annual Emissions</p>
+                <div class="results-highlight h-100">
+                    <div class="text-center">
+                        <h3 class="results-text">{{ "%.1f"|format(footprint.total_footprint) }}</h3>
+                        <p class="results-subtitle mb-0">kg CO₂e Total Annual Emissions</p>
                     </div>
                 </div>
             </div>
@@ -67,31 +67,31 @@
         
         <div class="row mt-4">
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
-                        <h4>{{ "%.1f"|format(footprint.transportation_footprint) }}</h4>
-                        <p>kg CO₂e Transportation</p>
-                        <i class="fas fa-car fa-2x text-info"></i>
+                        <i class="fas fa-car fa-2x text-info mb-3"></i>
+                        <h4 class="fw-bold">{{ "%.1f"|format(footprint.transportation_footprint) }}</h4>
+                        <p class="text-muted">kg CO₂e Transportation</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
-                        <h4>{{ "%.1f"|format(footprint.home_energy_footprint) }}</h4>
-                        <p>kg CO₂e Home Energy</p>
-                        <i class="fas fa-home fa-2x text-info"></i>
+                        <i class="fas fa-home fa-2x text-info mb-3"></i>
+                        <h4 class="fw-bold">{{ "%.1f"|format(footprint.home_energy_footprint) }}</h4>
+                        <p class="text-muted">kg CO₂e Home Energy</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
-                        <h4>{{ "%.1f"|format(footprint.food_footprint) }}</h4>
-                        <p>kg CO₂e Food</p>
-                        <i class="fas fa-utensils fa-2x text-info"></i>
+                        <i class="fas fa-utensils fa-2x text-info mb-3"></i>
+                        <h4 class="fw-bold">{{ "%.1f"|format(footprint.food_footprint) }}</h4>
+                        <p class="text-muted">kg CO₂e Food</p>
                     </div>
                 </div>
             </div>
@@ -100,15 +100,17 @@
         <h3 class="mt-5 mb-3">Reduction Suggestions</h3>
         <div class="row">
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-info text-white py-3">
+                        <h5 class="mb-0"><i class="fas fa-car me-2"></i>Transportation</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-car me-2 text-info"></i>Transportation</h5>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use public transit more often</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider carpooling to work</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use two-wheelers for shorter trips</li>
+                        <ul class="list-unstyled mb-0">
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Use public transit more often</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Consider carpooling to work</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Use two-wheelers for shorter trips</li>
                             {% if footprint.car_kilometers > 150 %}
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider an electric vehicle</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2 text-success"></i>Consider an electric vehicle</li>
                             {% endif %}
                         </ul>
                     </div>
@@ -116,18 +118,20 @@
             </div>
             
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-info text-white py-3">
+                        <h5 class="mb-0"><i class="fas fa-home me-2"></i>Home Energy</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-home me-2 text-info"></i>Home Energy</h5>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Switch to LED light bulbs</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use natural lighting during daytime</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Turn off fans and lights when not in use</li>
+                        <ul class="list-unstyled mb-0">
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Switch to LED light bulbs</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Use natural lighting during daytime</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Turn off fans and lights when not in use</li>
                             {% if footprint.electricity_kwh > 200 %}
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider rooftop solar panels</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Consider rooftop solar panels</li>
                             {% endif %}
                             {% if footprint.lpg_cylinders > 1 %}
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider induction cooking</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2 text-success"></i>Consider induction cooking</li>
                             {% endif %}
                         </ul>
                     </div>
@@ -135,17 +139,19 @@
             </div>
             
             <div class="col-md-4 mb-3">
-                <div class="card h-100">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-info text-white py-3">
+                        <h5 class="mb-0"><i class="fas fa-utensils me-2"></i>Food & Consumption</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-utensils me-2 text-info"></i>Food & Consumption</h5>
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled mb-0">
                             {% if footprint.diet_type == 'non-vegetarian' or footprint.diet_type == 'high-non-vegetarian' %}
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider adopting vegetarian diet</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Consider adopting vegetarian diet</li>
                             {% endif %}
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Buy local and seasonal produce</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Shop at local farmer's markets</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Reduce food waste</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Start kitchen garden for herbs and vegetables</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Buy local and seasonal produce</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Shop at local farmer's markets</li>
+                            <li class="py-2 border-bottom"><i class="fas fa-check-circle me-2 text-success"></i>Reduce food waste</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2 text-success"></i>Start kitchen garden for herbs and vegetables</li>
                         </ul>
                     </div>
                 </div>

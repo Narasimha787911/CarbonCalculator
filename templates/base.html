@@ -47,43 +47,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">
-                            <i class="fas fa-home me-1"></i> Home
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('calculator') }}">
-                            <i class="fas fa-calculator me-1"></i> Calculator
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">
-                            <i class="fas fa-info-circle me-1"></i> About
-                        </a>
-                    </li>
-                    
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('dashboard') }}">
-                                <i class="fas fa-tachometer-alt me-1"></i> Dashboard
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('my_footprints') }}">
-                                <i class="fas fa-history me-1"></i> My Footprints
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">
-                                <i class="fas fa-sign-out-alt me-1"></i> Logout
-                            </a>
-                        </li>
-                    {% else %}
+                    {% if not current_user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login') }}">
                                 <i class="fas fa-sign-in-alt me-1"></i> Login
@@ -95,14 +59,51 @@
                                 <i class="fas fa-user-plus me-1"></i> Register
                             </a>
                         </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
     
-    <!-- Main Content -->
+    {% if current_user.is_authenticated %}
+    <!-- Sidebar navigation for authenticated users -->
+    <div class="sidebar">
+        <nav class="nav flex-column">
+            <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Home</span>
+            </a>
+            <a class="nav-link {% if request.path == url_for('calculator') %}active{% endif %}" href="{{ url_for('calculator') }}">
+                <i class="fas fa-calculator"></i>
+                <span class="nav-text">Calculator</span>
+            </a>
+            <a class="nav-link {% if request.path == url_for('about') %}active{% endif %}" href="{{ url_for('about') }}">
+                <i class="fas fa-info-circle"></i>
+                <span class="nav-text">About</span>
+            </a>
+            <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a class="nav-link {% if request.path == url_for('my_footprints') %}active{% endif %}" href="{{ url_for('my_footprints') }}">
+                <i class="fas fa-history"></i>
+                <span class="nav-text">My Footprints</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content with margin for sidebar -->
+    <main class="container py-4 main-content">
+    {% else %}
+    <!-- Main Content without sidebar margin -->
     <main class="container py-4">
+    {% endif %}
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}

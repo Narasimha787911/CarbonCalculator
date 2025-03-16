@@ -53,3 +53,67 @@ footer {
     padding: 2rem 0;
     background-color: var(--bs-dark);
 }
+
+/* Sidebar styling */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 56px;
+    bottom: 0;
+    width: 60px;
+    background-color: var(--bs-dark);
+    z-index: 100;
+    transition: all 0.3s;
+    overflow-x: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+    padding: 15px 10px;
+    text-align: center;
+    color: var(--bs-white);
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link:hover, 
+.sidebar .nav-link.active {
+    background-color: var(--bs-dark-bg-subtle);
+    border-left-color: var(--bs-info);
+}
+
+.sidebar .nav-link i {
+    font-size: 1.5rem;
+    color: var(--bs-info);
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.sidebar .nav-text {
+    display: block;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+/* Main content adjustment for sidebar */
+.main-content {
+    margin-left: 60px;
+}
+
+/* Results page styles */
+.results-highlight {
+    background-color: var(--bs-info);
+    color: var(--bs-white);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.results-text {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.results-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
