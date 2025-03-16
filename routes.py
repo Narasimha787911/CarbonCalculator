@@ -1,12 +1,110 @@
 from flask import render_template, request, redirect, url_for, flash, session
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash
 from app import app, db
-from models import CarbonFootprint
+from models import User, CarbonFootprint
 from calculator import calculate_carbon_footprint
 
 @app.route('/')
 def index():
     """Homepage route"""
     return render_template('index.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """User registration page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+        
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        name = request.form.get('name', '')
+        
+        # Form validation
+        if not username or not email or not password:
+            flash('All fields are required', 'danger')
+            return render_template('register.html')
+            
+        if password != confirm_password:
+            flash('Passwords do not match', 'danger')
+            return render_template('register.html')
+            
+        # Check if username or email already exists
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists', 'danger')
+            return render_template('register.html')
+            
+        if User.query.filter_by(email=email).first():
+            flash('Email already exists', 'danger')
+            return render_template('register.html')
+        
+        # Create new user
+        user = User(username=username, email=email, name=name)
+        user.set_password(password)
+        
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Your account has been created! You can now log in.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            app.logger.error(f"Error registering user: {str(e)}")
+            flash('An error occurred during registration', 'danger')
+    
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """User login page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+        
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        remember = 'remember' in request.form
+        
+        if not username or not password:
+            flash('Please enter both username and password', 'danger')
+            return render_template('login.html')
+        
+        # Attempt to find the user
+        user = User.query.filter_by(username=username).first()
+        
+        # Check if user exists and password is correct
+        if user and user.check_password(password):
+            login_user(user, remember=remember)
+            flash(f'Welcome back, {user.name or user.username}!', 'success')
+            
+            # Redirect to the page the user was trying to access
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid username or password', 'danger')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    """User logout"""
+    logout_user()
+    flash('You have been logged out', 'info')
+    return redirect(url_for('index'))
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """User dashboard showing past calculations"""
+    # Get user's footprint calculations
+    footprints = CarbonFootprint.query.filter_by(user_id=current_user.id).order_by(CarbonFootprint.created_at.desc()).all()
+    return render_template('dashboard.html', footprints=footprints)
 
 @app.route('/calculator', methods=['GET', 'POST'])
 def calculator():
@@ -29,8 +127,15 @@ def calculator():
                 heating_oil_gallons=float(request.form.get('heating_oil_gallons', 0)),
                 
                 # Food & consumption
-                diet_type=request.form.get('diet_type', 'omnivore')
+                diet_type=request.form.get('diet_type', 'omnivore'),
+                
+                # Optional title
+                title=request.form.get('title', 'My Carbon Footprint')
             )
+            
+            # Link to user if logged in
+            if current_user.is_authenticated:
+                footprint.user_id = current_user.id
             
             # Calculate carbon footprint
             calculate_carbon_footprint(footprint)
@@ -64,6 +169,40 @@ def results():
     if not footprint:
         flash("Could not find your calculation results", "danger")
         return redirect(url_for('calculator'))
+    
+    # Calculate percentages for chart
+    total = footprint.total_footprint
+    if total > 0:
+        transport_percent = round((footprint.transportation_footprint / total) * 100)
+        home_percent = round((footprint.home_energy_footprint / total) * 100)
+        food_percent = round((footprint.food_footprint / total) * 100)
+    else:
+        transport_percent = home_percent = food_percent = 0
+    
+    return render_template(
+        'results.html', 
+        footprint=footprint,
+        transport_percent=transport_percent,
+        home_percent=home_percent,
+        food_percent=food_percent
+    )
+
+@app.route('/my-footprints')
+@login_required
+def my_footprints():
+    """View user's saved carbon footprint calculations"""
+    footprints = CarbonFootprint.query.filter_by(user_id=current_user.id).order_by(CarbonFootprint.created_at.desc()).all()
+    return render_template('my_footprints.html', footprints=footprints)
+
+@app.route('/footprint/<int:footprint_id>')
+def view_footprint(footprint_id):
+    """View a specific footprint calculation"""
+    footprint = CarbonFootprint.query.get_or_404(footprint_id)
+    
+    # If footprint belongs to a user, only they can view it
+    if footprint.user_id and (not current_user.is_authenticated or footprint.user_id != current_user.id):
+        flash("You don't have permission to view this calculation", "danger")
+        return redirect(url_for('index'))
     
     # Calculate percentages for chart
     total = footprint.total_footprint
