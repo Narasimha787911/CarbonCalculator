@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Carbon Emission Calculator - Home{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 mb-4">Calculate Your Carbon Footprint</h1>
+        <p class="lead mb-4">
+            Understand your environmental impact and take meaningful steps toward a more sustainable lifestyle.
+        </p>
+        <a href="{{ url_for('calculator') }}" class="btn btn-info btn-lg px-4 py-2">
+            <i class="fas fa-calculator me-2"></i>Start Calculating
+        </a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark-subtle">
+            <div class="card-body text-center">
+                <i class="fas fa-car-side fa-3x mb-3 text-info"></i>
+                <h3 class="card-title">Transportation</h3>
+                <p class="card-text">
+                    Calculate emissions from your car, public transportation, 
+                    and air travel to understand your transit carbon footprint.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark-subtle">
+            <div class="card-body text-center">
+                <i class="fas fa-home fa-3x mb-3 text-info"></i>
+                <h3 class="card-title">Home Energy</h3>
+                <p class="card-text">
+                    Measure the environmental impact of your electricity, 
+                    natural gas, and heating oil consumption.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark-subtle">
+            <div class="card-body text-center">
+                <i class="fas fa-utensils fa-3x mb-3 text-info"></i>
+                <h3 class="card-title">Food & Consumption</h3>
+                <p class="card-text">
+                    Understand how your diet choices affect your
+                    overall carbon footprint and environmental impact.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-12">
+        <div class="card bg-dark-subtle">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Why Calculate Your Carbon Footprint?</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Understand your personal environmental impact
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Identify areas where you can make the biggest difference
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Track your progress as you make eco-friendly changes
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Compare your footprint to national and global averages
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Make informed decisions about your lifestyle choices
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Contribute to global efforts to combat climate change
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('calculator') }}" class="btn btn-info">
+                        <i class="fas fa-calculator me-2"></i>Calculate Your Footprint
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
