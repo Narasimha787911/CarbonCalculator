@@ -1,9 +1,15 @@
 from flask import render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
+from datetime import datetime
 from app import app, db
 from models import User, CarbonFootprint
 from calculator import calculate_carbon_footprint
+
+# Context processor to inject variables into all templates
+@app.context_processor
+def inject_now():
+    return {'now': datetime.now()}
 
 @app.route('/')
 def index():

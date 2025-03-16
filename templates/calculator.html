@@ -1,132 +1,156 @@
 {% extends "base.html" %}
 
-{% block title %}Carbon Emission Calculator - Calculate{% endblock %}
+{% block title %}Carbon Emission Calculator{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Calculate Your Carbon Footprint</h1>
-<p class="lead mb-4">
-    Fill out the form below to estimate your annual carbon emissions. 
-    The more information you provide, the more accurate your calculation will be.
-</p>
+<h1 class="mb-4">Carbon Footprint Calculator</h1>
 
-<form id="calculator-form" method="POST" action="{{ url_for('calculator') }}" class="needs-validation" novalidate>
-    <!-- Transportation Section -->
-    <div class="form-section">
-        <h3><i class="fas fa-car-side me-2"></i>Transportation</h3>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="car_miles" class="form-label">Annual Car Miles</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="car_miles" name="car_miles" min="0" value="0">
-                    <span class="input-group-text">miles</span>
-                </div>
-                <div class="input-help">Average American drives ~13,500 miles per year</div>
-            </div>
-            
-            <div class="col-md-6">
-                <label for="car_efficiency" class="form-label">Car Fuel Efficiency</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="car_efficiency" name="car_efficiency" min="1" value="25">
-                    <span class="input-group-text">mpg</span>
-                </div>
-                <div class="input-help">Average new car gets ~25 mpg</div>
+<form method="POST" action="{{ url_for('calculator') }}">
+    <div class="card bg-dark-subtle mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                <i class="fas fa-tag me-2 text-info"></i>
+                Calculation Info
+            </h3>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="My Carbon Footprint" required>
+                <div class="form-text">Give this calculation a memorable name</div>
             </div>
         </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="public_transit_miles" class="form-label">Annual Public Transit Miles</label>
+    </div>
+    
+    <div class="card bg-dark-subtle mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                <i class="fas fa-car me-2 text-info"></i>
+                Transportation
+            </h3>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="car_miles" class="form-label">Car Miles</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="car_miles" name="car_miles" value="0" min="0" step="0.1">
+                        <span class="input-group-text">miles/week</span>
+                    </div>
+                    <div class="form-text">Average miles driven per week</div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="car_efficiency" class="form-label">Car Fuel Efficiency</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="car_efficiency" name="car_efficiency" value="25" min="1" step="0.1">
+                        <span class="input-group-text">mpg</span>
+                    </div>
+                    <div class="form-text">Miles per gallon your vehicle achieves</div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="public_transit_miles" class="form-label">Public Transit</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="public_transit_miles" name="public_transit_miles" min="0" value="0">
-                    <span class="input-group-text">miles</span>
+                    <input type="number" class="form-control" id="public_transit_miles" name="public_transit_miles" value="0" min="0" step="0.1">
+                    <span class="input-group-text">miles/week</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-4">
-                <label for="flights_short" class="form-label">Short Flights (<1000 miles)</label>
-                <div class="input-group" data-bs-toggle="tooltip" title="Round trips count as 2 flights">
-                    <input type="number" class="form-control" id="flights_short" name="flights_short" min="0" value="0">
-                    <span class="input-group-text">flights</span>
-                </div>
+                <div class="form-text">Average miles traveled by bus, train, etc. per week</div>
             </div>
             
-            <div class="col-md-4">
-                <label for="flights_medium" class="form-label">Medium Flights (1000-3000 miles)</label>
-                <div class="input-group" data-bs-toggle="tooltip" title="Round trips count as 2 flights">
-                    <input type="number" class="form-control" id="flights_medium" name="flights_medium" min="0" value="0">
-                    <span class="input-group-text">flights</span>
+            <h5 class="mt-4 mb-3">Air Travel (trips per year)</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="flights_short" class="form-label">Short Flights</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="flights_short" name="flights_short" value="0" min="0">
+                        <span class="input-group-text">trips/year</span>
+                    </div>
+                    <div class="form-text">Under 1,000 miles one-way</div>
                 </div>
-            </div>
-            
-            <div class="col-md-4">
-                <label for="flights_long" class="form-label">Long Flights (>3000 miles)</label>
-                <div class="input-group" data-bs-toggle="tooltip" title="Round trips count as 2 flights">
-                    <input type="number" class="form-control" id="flights_long" name="flights_long" min="0" value="0">
-                    <span class="input-group-text">flights</span>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="flights_medium" class="form-label">Medium Flights</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="flights_medium" name="flights_medium" value="0" min="0">
+                        <span class="input-group-text">trips/year</span>
+                    </div>
+                    <div class="form-text">1,000-3,000 miles one-way</div>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="flights_long" class="form-label">Long Flights</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="flights_long" name="flights_long" value="0" min="0">
+                        <span class="input-group-text">trips/year</span>
+                    </div>
+                    <div class="form-text">Over 3,000 miles one-way</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Home Energy Section -->
-    <div class="form-section">
-        <h3><i class="fas fa-home me-2"></i>Home Energy</h3>
-        
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="electricity_kwh" class="form-label">Annual Electricity Usage</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="electricity_kwh" name="electricity_kwh" min="0" value="0">
-                    <span class="input-group-text">kWh</span>
-                </div>
-                <div class="input-help">Average US household: ~10,700 kWh/year</div>
-            </div>
+    <div class="card bg-dark-subtle mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                <i class="fas fa-home me-2 text-info"></i>
+                Home Energy
+            </h3>
             
-            <div class="col-md-4">
-                <label for="natural_gas_therms" class="form-label">Annual Natural Gas Usage</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="natural_gas_therms" name="natural_gas_therms" min="0" value="0">
-                    <span class="input-group-text">therms</span>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="electricity_kwh" class="form-label">Electricity</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="electricity_kwh" name="electricity_kwh" value="0" min="0" step="0.1">
+                        <span class="input-group-text">kWh/month</span>
+                    </div>
+                    <div class="form-text">From your utility bill</div>
                 </div>
-                <div class="input-help">Average US household: ~400 therms/year</div>
-            </div>
-            
-            <div class="col-md-4">
-                <label for="heating_oil_gallons" class="form-label">Annual Heating Oil Usage</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="heating_oil_gallons" name="heating_oil_gallons" min="0" value="0">
-                    <span class="input-group-text">gallons</span>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="natural_gas_therms" class="form-label">Natural Gas</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="natural_gas_therms" name="natural_gas_therms" value="0" min="0" step="0.1">
+                        <span class="input-group-text">therms/month</span>
+                    </div>
+                    <div class="form-text">From your utility bill</div>
                 </div>
-                <div class="input-help">If applicable</div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="heating_oil_gallons" class="form-label">Heating Oil</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="heating_oil_gallons" name="heating_oil_gallons" value="0" min="0" step="0.1">
+                        <span class="input-group-text">gallons/month</span>
+                    </div>
+                    <div class="form-text">If applicable</div>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Food & Consumption Section -->
-    <div class="form-section">
-        <h3><i class="fas fa-utensils me-2"></i>Food & Consumption</h3>
-        
-        <div class="row">
-            <div class="col-md-6">
+    <div class="card bg-dark-subtle mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                <i class="fas fa-utensils me-2 text-info"></i>
+                Food
+            </h3>
+            
+            <div class="mb-3">
                 <label for="diet_type" class="form-label">Diet Type</label>
                 <select class="form-select" id="diet_type" name="diet_type">
-                    <option value="vegan">Vegan (plant-based only)</option>
-                    <option value="vegetarian">Vegetarian (includes dairy/eggs)</option>
-                    <option value="pescatarian">Pescatarian (vegetarian + fish)</option>
-                    <option value="omnivore" selected>Omnivore (average meat consumption)</option>
-                    <option value="high_meat">High meat consumption</option>
+                    <option value="omnivore">Omnivore (Regular meat consumption)</option>
+                    <option value="flexitarian">Flexitarian (Occasional meat)</option>
+                    <option value="pescatarian">Pescatarian (Fish, no meat)</option>
+                    <option value="vegetarian">Vegetarian (No meat or fish)</option>
+                    <option value="vegan">Vegan (No animal products)</option>
                 </select>
+                <div class="form-text">Select the option that best describes your typical diet</div>
             </div>
         </div>
     </div>
     
-    <!-- Submit Button -->
-    <div class="d-grid gap-2 col-md-6 mx-auto mt-4">
+    <div class="d-grid gap-2">
         <button type="submit" class="btn btn-info btn-lg">
-            <i class="fas fa-calculator me-2"></i>Calculate My Footprint
+            <i class="fas fa-calculator me-2"></i>
+            Calculate My Carbon Footprint
         </button>
     </div>
 </form>

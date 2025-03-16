@@ -3,138 +3,155 @@
 {% block title %}Carbon Emission Calculator - Results{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Your Carbon Footprint Results</h1>
-
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="card results-card bg-dark-subtle mb-4">
-            <div class="card-body text-center">
-                <h2 class="mb-3">Total Annual Carbon Footprint</h2>
-                <p class="carbon-total mb-2">{{ footprint.total_footprint }} kg CO₂e</p>
-                <p class="text-muted">Carbon dioxide equivalent emissions</p>
-                
-                <div class="mt-4">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="p-3">
-                                <i class="fas fa-car-side fa-2x mb-2 text-info"></i>
-                                <h5>Transportation</h5>
-                                <p class="lead">{{ footprint.transportation_footprint }} kg CO₂e</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-3">
-                                <i class="fas fa-home fa-2x mb-2 text-info"></i>
-                                <h5>Home Energy</h5>
-                                <p class="lead">{{ footprint.home_energy_footprint }} kg CO₂e</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-3">
-                                <i class="fas fa-utensils fa-2x mb-2 text-info"></i>
-                                <h5>Food & Consumption</h5>
-                                <p class="lead">{{ footprint.food_footprint }} kg CO₂e</p>
-                            </div>
-                        </div>
+<div class="card bg-dark-subtle mb-4">
+    <div class="card-body">
+        <h1 class="card-title">Your Carbon Footprint Results</h1>
+        <p class="lead">Based on your input, we've calculated your carbon footprint.</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-info text-white h-100">
+                    <div class="card-body text-center">
+                        <h3 class="display-4">{{ "%.1f"|format(footprint.total_footprint) }}</h3>
+                        <p class="lead">kg CO₂e Total Annual Emissions</p>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Chart for emissions breakdown -->
-        <div class="card results-card bg-dark-subtle">
-            <div class="card-body">
-                <h3 class="card-title mb-4 text-center">Emissions Breakdown</h3>
-                <div class="chart-container">
-                    <canvas id="emissions-chart" 
-                            data-transport="{{ transport_percent }}" 
-                            data-home="{{ home_percent }}" 
-                            data-food="{{ food_percent }}">
-                    </canvas>
+            
+            <div class="col-md-8">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4>What does this mean?</h4>
+                        <p>
+                            The average person produces about 4,000 kg CO₂e per year. 
+                            Your carbon footprint is 
+                            {% if footprint.total_footprint < 3000 %}
+                                <span class="text-success">below average</span>
+                            {% elif footprint.total_footprint < 5000 %}
+                                <span class="text-warning">about average</span>
+                            {% else %}
+                                <span class="text-danger">above average</span>
+                            {% endif %}.
+                        </p>
+                        
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div class="progress-bar bg-info" role="progressbar" 
+                                 style="width: {{ (footprint.transportation_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}%;" 
+                                 aria-valuenow="{{ (footprint.transportation_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                Transportation {{ "%.1f"|format(footprint.transportation_footprint / footprint.total_footprint * 100 if footprint.total_footprint > 0 else 0) }}%
+                            </div>
+                        </div>
+                        
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div class="progress-bar bg-info" role="progressbar" 
+                                 style="width: {{ (footprint.home_energy_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}%;" 
+                                 aria-valuenow="{{ (footprint.home_energy_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                Home Energy {{ "%.1f"|format(footprint.home_energy_footprint / footprint.total_footprint * 100 if footprint.total_footprint > 0 else 0) }}%
+                            </div>
+                        </div>
+                        
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div class="progress-bar bg-info" role="progressbar" 
+                                 style="width: {{ (footprint.food_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}%;" 
+                                 aria-valuenow="{{ (footprint.food_footprint / footprint.total_footprint * 100)|round|int if footprint.total_footprint > 0 else 0 }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                Food {{ "%.1f"|format(footprint.food_footprint / footprint.total_footprint * 100 if footprint.total_footprint > 0 else 0) }}%
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Comparison to averages -->
-        <div class="card results-card bg-dark-subtle mt-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3">How Do You Compare?</h3>
-                <p>The average American has a carbon footprint of approximately 16,000 kg CO₂e per year.</p>
-                
-                {% if footprint.total_footprint < 8000 %}
-                    <div class="alert alert-success" role="alert">
-                        <i class="fas fa-leaf me-2"></i>
-                        <strong>Great job!</strong> Your carbon footprint is significantly below the US average.
+        <div class="row mt-4">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h4>{{ "%.1f"|format(footprint.transportation_footprint) }}</h4>
+                        <p>kg CO₂e Transportation</p>
+                        <i class="fas fa-car fa-2x text-info"></i>
                     </div>
-                {% elif footprint.total_footprint < 14000 %}
-                    <div class="alert alert-info" role="alert">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>Good work!</strong> Your carbon footprint is below the US average.
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h4>{{ "%.1f"|format(footprint.home_energy_footprint) }}</h4>
+                        <p>kg CO₂e Home Energy</p>
+                        <i class="fas fa-home fa-2x text-info"></i>
                     </div>
-                {% elif footprint.total_footprint < 18000 %}
-                    <div class="alert alert-warning" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>You're close to average.</strong> There's room for improvement in your carbon footprint.
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h4>{{ "%.1f"|format(footprint.food_footprint) }}</h4>
+                        <p>kg CO₂e Food</p>
+                        <i class="fas fa-utensils fa-2x text-info"></i>
                     </div>
-                {% else %}
-                    <div class="alert alert-danger" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        <strong>Your footprint is above average.</strong> Consider the suggestions below to reduce your impact.
-                    </div>
-                {% endif %}
+                </div>
             </div>
         </div>
         
-        <!-- Suggestions -->
-        <div class="card results-card bg-dark-subtle mt-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3">Ways to Reduce Your Footprint</h3>
-                
-                {% if footprint.transportation_footprint > 3000 %}
-                <div class="mb-3">
-                    <h5><i class="fas fa-car-side me-2 text-info"></i>Transportation Suggestions</h5>
-                    <ul>
-                        <li>Consider carpooling or using public transportation more often</li>
-                        <li>Explore electric or hybrid vehicle options for your next car purchase</li>
-                        <li>Combine errands to reduce the number of trips</li>
-                        <li>Consider biking or walking for short distances</li>
-                    </ul>
+        <h3 class="mt-5 mb-3">Reduction Suggestions</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-car me-2 text-info"></i>Transportation</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use public transit more often</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider carpooling to work</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Combine errands to reduce trips</li>
+                            {% if footprint.car_miles > 100 %}
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider an electric vehicle</li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
-                {% endif %}
-                
-                {% if footprint.home_energy_footprint > 2000 %}
-                <div class="mb-3">
-                    <h5><i class="fas fa-home me-2 text-info"></i>Home Energy Suggestions</h5>
-                    <ul>
-                        <li>Switch to LED light bulbs</li>
-                        <li>Improve home insulation to reduce heating/cooling needs</li>
-                        <li>Consider installing programmable thermostats</li>
-                        <li>Explore renewable energy options like solar panels</li>
-                    </ul>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-home me-2 text-info"></i>Home Energy</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Switch to LED light bulbs</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Improve home insulation</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Use a programmable thermostat</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Consider renewable energy options</li>
+                        </ul>
+                    </div>
                 </div>
-                {% endif %}
-                
-                {% if footprint.food_footprint > 2500 %}
-                <div>
-                    <h5><i class="fas fa-utensils me-2 text-info"></i>Food & Consumption Suggestions</h5>
-                    <ul>
-                        <li>Reduce meat consumption, especially red meat</li>
-                        <li>Choose locally sourced and seasonal foods when possible</li>
-                        <li>Minimize food waste through meal planning</li>
-                        <li>Consider a more plant-based diet</li>
-                    </ul>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-utensils me-2 text-info"></i>Food & Consumption</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Reduce meat consumption</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Buy local and seasonal produce</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Reduce food waste</li>
+                            <li><i class="fas fa-check-circle me-2 text-success"></i>Compost organic waste</li>
+                        </ul>
+                    </div>
                 </div>
-                {% endif %}
             </div>
         </div>
         
-        <!-- Action Buttons -->
-        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-            <a href="{{ url_for('calculator') }}" class="btn btn-outline-info">
-                <i class="fas fa-redo me-2"></i>Recalculate
+        <div class="mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-home me-2"></i>
+                Return to Dashboard
             </a>
-            <a href="{{ url_for('about') }}" class="btn btn-info">
-                <i class="fas fa-info-circle me-2"></i>Learn More
+            <a href="{{ url_for('calculator') }}" class="btn btn-info ms-2">
+                <i class="fas fa-calculator me-2"></i>
+                New Calculation
             </a>
         </div>
     </div>
