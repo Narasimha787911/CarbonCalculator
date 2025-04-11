@@ -48,7 +48,7 @@ Ensure you have the following installed:
    This will create `carbon_emission.db` if it doesn’t exist.
 5. Run the Flask application:
    ```bash
-   python app.py
+   python main.py
    ```
 6. Open your browser and navigate to:
    ```
