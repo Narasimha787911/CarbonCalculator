@@ -1,0 +1,10 @@
+Flask
+flask-login
+flask-sqlalchemy
+psycopg2-binary
+numpy
+pandas
+scikit-learn
+nltk
+gunicorn
+werkzeug
